@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok Get Coins</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #000;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 20px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .payment-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 20px;
+    }
+
+    .payment-logos img {
+      height: 25px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      margin: 10px 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .coins-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .coin-option {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 10px 0;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: #fafafa;
+      transition: all 0.2s ease;
+    }
+
+    .coin-option:hover,
+    .coin-option.active {
+      border-color: gold;
+      background-color: #fffbe6;
+    }
+
+    .coin-option::before {
+      content: "🪙 ";
+    }
+
+    .coin-price {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .custom-input {
+      width: 70%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 16px;
+      outline: none;
+      color: #000;
+    }
+
+    .recharge-btn {
+      width: 100%;
+      background-color: #fe2c55;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 15px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: 0.2s ease;
+    }
+
+    .recharge-btn:hover {
+      background-color: #e41f47;
+    }
+
+    /* Popup base */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      animation: slideDown 0.35s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .card-number {
+      font-size: 20px;
+      letter-spacing: 2px;
+      margin: 10px 0 10px;
+      color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .card-number img {
+      height: 22px;
+    }
+
+    .applepay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+
+    .applepay img {
+      height: 20px;
+    }
+
+    .payment-method {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .popup button {
+      background-color: #fe2c55;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Success popup */
+    .success-icon {
+      width: 70px;
+      height: 70px;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 15px;
+    }
+
+    /* Loading popup */
+    .loading-icon {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ddd;
+      border-top-color: #fe2c55;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><span style="color:#000;">TikTok</span> <span style="color:#fe2c55;">Get Coins</span></h1>
+
+    <!-- Payment logos top -->
+    <div class="payment-logos">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Pay">
+    </div>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username" />
+
+    <div class="coins-grid" id="coins">
+      <div class="coin-option" data-amount="30">30 <span class="coin-price">$0.36</span></div>
+      <div class="coin-option" data-amount="350">350 <span class="coin-price">$4.20</span></div>
+      <div class="coin-option" data-amount="700">700 <span class="coin-price">$8.40</span></div>
+      <div class="coin-option" data-amount="1400">1400 <span class="coin-price">$16.80</span></div>
+      <div class="coin-option" data-amount="3500">3500 <span class="coin-price">$42.00</span></div>
+      <div class="coin-option" data-amount="7000">7000 <span class="coin-price">$84.00</span></div>
+      <div class="coin-option" data-amount="17500">17500 <span class="coin-price">$210.00</span></div>
+      <div class="coin-option" id="custom">
+        🪙 <input type="number" id="customAmount" class="custom-input" placeholder="Custom" min="1" />
+      </div>
+    </div>
+
+    <div class="payment-logos">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Pay">
+    </div>
+
+    <button class="recharge-btn" id="recharge">Recharge</button>
+  </div>
+
+  <!-- Payment popup -->
+  <div class="popup" id="paymentPopup">
+    <div class="popup-content">
+      <div class="card-number">
+        **** **** **** 7586
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+      </div>
+
+      <div class="applepay">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay">
+        <span>Apple Pay</span>
+      </div>
+
+      <div class="payment-method">
+        <label for="method">Select Payment Method:</label>
+        <select id="method">
+          <option>Visa</option>
+          <option>MasterCard</option>
+          <option>Apple Pay</option>
+          <option>Google Pay</option>
+        </select>
+      </div>
+
+      <button id="confirmPayment">Recharge Now</button>
+    </div>
+  </div>
+
+  <!-- Loading popup -->
+  <div class="popup" id="loadingPopup">
+    <div class="popup-content">
+      <div class="loading-icon"></div>
+      <p>Processing Payment...</p>
+    </div>
+  </div>
+
+  <!-- Success popup -->
+  <div class="popup" id="successPopup">
+    <div class="popup-content">
+      <div class="success-icon">✔</div>
+      <p id="successMessage">Payment Successful!</p>
+      <button onclick="closeSuccess()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const coins = document.querySelectorAll('.coin-option');
+    const customAmountInput = document.getElementById('customAmount');
+    const rechargeBtn = document.getElementById('recharge');
+    const usernameInput = document.getElementById('username');
+    const paymentPopup = document.getElementById('paymentPopup');
+    const loadingPopup = document.getElementById('loadingPopup');
+    const successPopup = document.getElementById('successPopup');
+    let selectedCoins = null;
+
+    coins.forEach(c => {
+      c.addEventListener('click', () => {
+        coins.forEach(el => el.classList.remove('active'));
+        c.classList.add('active');
+        if (c.id !== 'custom') {
+          selectedCoins = c.dataset.amount;
+        }
+      });
+    });
+
+    customAmountInput.addEventListener('input', () => {
+      selectedCoins = customAmountInput.value;
+    });
+
+    rechargeBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert('Please enter a username!');
+        return;
+      }
+      if (!selectedCoins) {
+        alert('Please select or enter coin amount!');
+        return;
+      }
+      paymentPopup.style.display = 'flex';
+    });
+
+    document.getElementById('confirmPayment').addEventListener('click', () => {
+      paymentPopup.style.display = 'none';
+      loadingPopup.style.display = 'flex';
+      setTimeout(() => {
+        loadingPopup.style.display = 'none';
+        const username = usernameInput.value.trim();
+        const msg = `✅ Payment Successful!\n${selectedCoins} coins have been sent to ${username}.\nYou will receive them within 72 hours.`;
+        document.getElementById('successMessage').innerText = msg;
+        successPopup.style.display = 'flex';
+      }, 3000);
+    });
+
+    function closeSuccess() {
+      successPopup.style.display = 'none';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === paymentPopup) paymentPopup.style.display = 'none';
+      if (e.target === successPopup) successPopup.style.display = 'none';
+      if (e.target === loadingPopup) loadingPopup.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
